@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class StudentController {
 
     @Operation(summary = "List all students", description = "Retrieve all students in the system")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved students")
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public String listStudents(Model model) {
         model.addAttribute("students", studentService.getAllStudents());
@@ -27,6 +29,7 @@ public class StudentController {
 
     @Operation(summary = "Show registration form", description = "Display form for registering a new student")
     @ApiResponse(responseCode = "200", description = "Successfully retrieved students")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/new")
     public String showRegistrationForm(Model model) {
         model.addAttribute("student", new Student());
@@ -38,6 +41,7 @@ public class StudentController {
             @ApiResponse(responseCode = "201", description = "Student registered successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid student data")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public String registerStudent(@ModelAttribute Student student) {
         studentService.saveStudent(student);
@@ -49,6 +53,7 @@ public class StudentController {
             @ApiResponse(responseCode = "200", description = "Student details retrieved successfully"),
             @ApiResponse(responseCode = "404", description = "Student not found")
     })
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
     public String showStudentDetails(@PathVariable String id, Model model) {
         model.addAttribute("student", studentService.getStudentById(id).orElse(null));
@@ -60,6 +65,7 @@ public class StudentController {
             @ApiResponse(responseCode = "200", description = "Form displayed successfully"),
             @ApiResponse(responseCode = "404", description = "Student not found")
     })
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}/edit")
     public String showEditForm(@PathVariable String id, Model model) {
         model.addAttribute("student", studentService.getStudentById(id).orElse(null));
@@ -71,6 +77,7 @@ public class StudentController {
             @ApiResponse(responseCode = "200", description = "Student updated successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid student data")
     })
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/{id}")
     public String updateStudent(@PathVariable String id, @ModelAttribute Student student) {
         student.setId(id);
@@ -82,6 +89,7 @@ public class StudentController {
             @ApiResponse(responseCode = "204", description = "Student deleted successfully"),
             @ApiResponse(responseCode = "404", description = "Student not found")
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}/delete")
     public String deleteStudent(@PathVariable String id) {
         studentService.deleteStudent(id);
