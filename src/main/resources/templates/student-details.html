@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student Details</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; }
+        h1 { color: #333; }
+        .student-info { max-width: 400px; margin: 20px 0; }
+        .student-info p { margin: 10px 0; }
+        .student-info strong { display: inline-block; width: 120px; }
+        a { color: #007bff; text-decoration: none; margin-right: 10px; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+<h1>Student Details</h1>
+<div th:if="${student}" class="student-info">
+    <p><strong>Name:</strong> <span th:text="${student.name}"></span></p>
+    <p><strong>Contact Details:</strong> <span th:text="${student.contactDetails}"></span></p>
+    <p><strong>Address:</strong> <span th:text="${student.address}"></span></p>
+    <p><strong>Pincode:</strong> <span th:text="${student.pincode}"></span></p>
+    <a th:href="@{/students/{id}/edit(id=${student.id})}">Edit</a>
+    <a th:href="@{/students/{id}/delete(id=${student.id})}" onclick="return confirm('Are you sure you want to delete this student?');">Delete</a>
+</div>
+<div th:unless="${student}">
+    <p>Student not found</p>
+</div>
+<a href="/students">Back to List</a>
+</body>
+</html>
