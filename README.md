@@ -56,7 +56,12 @@ Before running the application, ensure you have the following installed:
    ```sh
    docker run -p 9090:8080 student-management-app
    ```
+3. **Pull the image form Docker Hub**
+    ```sh
+   docker pull astitva8796/student-management-app:latest
+   ```
 
+   
 ## API Endpoints
 
 ### Authentication
